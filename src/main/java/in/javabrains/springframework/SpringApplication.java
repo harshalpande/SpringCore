@@ -10,8 +10,9 @@ public class SpringApplication {
 		
 		ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
 		
-		TriangleBean triangleBean = context.getBean(TriangleBean.class);
+		//TriangleBean triangleBean = context.getBean(TriangleBean.class);  	// Access way no 1
 		
+		TriangleBean triangleBean = (TriangleBean)context.getBean("3PointAngle");		// Access way no 2 - using Alias
 		triangleBean.draw();
 		
 	}
