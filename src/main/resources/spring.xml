@@ -55,14 +55,18 @@
 	<!-- Alias is used to access the same bean using alias name -->
 	<alias name="triangle" alias="3PointAngle" />
 
-	<bean id="circle"
+	<!-- stereotype package annotation used @component on Circle bean class -->
+	<!-- <bean id="circle"
 		class="in.javabrains.springframework.bean.CircleBean">
-		<!-- <property name="centre" ref="point1"></property> -->
-		<!-- Suppose this mandatory 
+		<property name="centre" ref="point1"></property>
+		Suppose this mandatory 
 			property is not supplied here, then to get the proper Error Message other 
 			than NPE, @Required/@Autowired Annotation is required.
-			@Required is deprecated -->
-	</bean>
+			@Required is deprecated
+	</bean> -->
+	
+	<!-- below tag scans the package mentioned for annotations from org.springframework.stereotype packages -->
+	<context:component-scan base-package="in.javabrains.springframework.bean"></context:component-scan>
 
 	<bean
 		class="in.javabrains.springframework.bean.DisplayNameBeanPostProcessor"></bean>
@@ -76,5 +80,15 @@
 	<bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"></bean>
 	
 	<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"></bean>
+
+	<!-- For Extracting Messages from Properties files -->
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>in.javabrains.springframework.MyProperty_EN</value>
+				<value>in.javabrains.springframework.MyProperty_FI</value>
+			</list>
+		</property>
+	</bean>
 
 </beans>
