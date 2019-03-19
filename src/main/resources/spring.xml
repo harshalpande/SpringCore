@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
 
-<beans>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+	xmlns:context="http://www.springframework.org/schema/context"
+	
+	default-init-method="myInitMethod"
+	default-destroy-method="myDestroyMethod">
+	
+	<context:annotation-config/>
+	
 	<bean id="triangle"
-		class="in.javabrains.springframework.bean.TriangleBean">
+		class="in.javabrains.springframework.bean.TriangleBean"
+		init-method="myInitMethod" destroy-method="myDestroyMethod">
 		<!-- 1. Using Properties <property name="type" value="equilateral"></property> -->
 
 		<!-- 2. using constructors -->
@@ -14,10 +24,10 @@
 			POJO -->
 		<property name="pointA" ref="point1"></property>
 
-		<!-- This is INNER bean, hence here ref of parent bean and ID of inner bean is not required -->
+		<!-- This is INNER bean, hence here ref of parent bean and ID of inner 
+			bean is not required -->
 		<property name="pointB">
-			<bean 
-				class="in.javabrains.springframework.bean.PointBean">
+			<bean class="in.javabrains.springframework.bean.PointBean">
 				<property name="coordinateX" value="-20"></property>
 				<property name="coordinateY" value="0"></property>
 			</bean>
@@ -29,8 +39,9 @@
 	<!-- 3.a Object Refrences Source -->
 	<bean id="point1"
 		class="in.javabrains.springframework.bean.PointBean">
-		<property name="coordinateX" value="0"></property>
-		<property name="coordinateY" value="0"></property>
+		<qualifier value="circleQualifier"></qualifier>
+		<property name="coordinateX" value="${pointA.coordinateX}"></property>
+		<property name="coordinateY" value="${pointA.coordinateY}"></property>
 	</bean>
 
 
@@ -42,6 +53,28 @@
 	</bean>
 
 	<!-- Alias is used to access the same bean using alias name -->
-	<alias name="triangle" alias="3PointAngle"/>
+	<alias name="triangle" alias="3PointAngle" />
+
+	<bean id="circle"
+		class="in.javabrains.springframework.bean.CircleBean">
+		<!-- <property name="centre" ref="point1"></property> -->
+		<!-- Suppose this mandatory 
+			property is not supplied here, then to get the proper Error Message other 
+			than NPE, @Required/@Autowired Annotation is required.
+			@Required is deprecated -->
+	</bean>
+
+	<bean
+		class="in.javabrains.springframework.bean.DisplayNameBeanPostProcessor"></bean>
+
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations"
+			value="in/javabrains/springframework/locationProperty.properties"></property>
+	</bean>
+	
+	<bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"></bean>
+	
+	<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"></bean>
 
 </beans>
