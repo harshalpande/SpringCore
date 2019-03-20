@@ -8,9 +8,12 @@ import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
+import in.javabrains.springframework.event.DrawEvent;
 import sun.util.locale.LanguageTag;
 
 /**
@@ -33,9 +36,11 @@ import sun.util.locale.LanguageTag;
  * @author Harshal S Pande
  */
 @Component
-public class CircleBean implements Shape {
+public class CircleBean implements Shape, ApplicationEventPublisherAware {
 
 	public PointBean centre;
+	
+	private ApplicationEventPublisher publisher;
 
 	/**
 	 * Using Spring's dependency Injection to extract value of MessageSource from
@@ -52,6 +57,10 @@ public class CircleBean implements Shape {
 				new Object[] { getCentre().getCoordinateX(), getCentre().getCoordinateY() }, "Circle properties",
 				Locale.ENGLISH));
 		System.out.println(messageSource.getMessage("blue", null, "BLUE COLOR", Locale.ENGLISH));
+		
+		System.out.println("Calling Draw Event after this line");
+		DrawEvent drawEvent = new DrawEvent(this);
+		publisher.publishEvent(drawEvent);
 	}
 
 	public PointBean getCentre() {
@@ -112,6 +121,10 @@ public class CircleBean implements Shape {
 
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource = messageSource;
+	}
+
+	public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+		this.publisher = applicationEventPublisher;
 	}
 
 }

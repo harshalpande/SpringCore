@@ -66,7 +66,7 @@
 	</bean> -->
 	
 	<!-- below tag scans the package mentioned for annotations from org.springframework.stereotype packages -->
-	<context:component-scan base-package="in.javabrains.springframework.bean"></context:component-scan>
+	<context:component-scan base-package="in.javabrains.springframework"></context:component-scan>
 
 	<bean
 		class="in.javabrains.springframework.bean.DisplayNameBeanPostProcessor"></bean>
